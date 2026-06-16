@@ -3,126 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ blog.title }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #08111f;
+            --bg-2: #0d1728;
+            --panel: rgba(12, 20, 35, 0.82);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text: #edf2ff;
+            --muted: #97a6c1;
+            --muted-2: #6e7e9d;
+            --accent: #f4b860;
+            --accent-2: #8dd3ff;
+            --rose: #ff8db3;
+            --shadow: 0 28px 80px rgba(2, 6, 23, 0.45);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0f0f13; color: #e2e8f0; min-height: 100vh; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(141, 211, 255, 0.14), transparent 28%),
+                radial-gradient(circle at 80% 10%, rgba(244, 184, 96, 0.12), transparent 24%),
+                linear-gradient(180deg, var(--bg), var(--bg-2));
+            color: var(--text); min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed; inset: 0; pointer-events: none;
+            background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 54px 54px;
+            mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), transparent 85%);
+        }
 
-        /* ── HEADER ── */
         header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(15,15,19,0.85);
-            backdrop-filter: blur(16px);
+            background: rgba(7, 14, 27, 0.74);
+            backdrop-filter: blur(18px);
             border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 18px 48px;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px clamp(18px, 4vw, 48px);
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
-        .logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem; font-weight: 800;
+            background: linear-gradient(135deg, #fff6df, var(--accent), var(--accent-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
         .back-btn {
-            color: #94a3b8; text-decoration: none; font-size: 0.88rem; font-weight: 500;
+            color: #d8e4ff; text-decoration: none; font-size: 0.88rem; font-weight: 600;
             display: flex; align-items: center; gap: 6px;
-            padding: 8px 16px; border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.2s;
+            padding: 10px 16px; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            transition: all 0.2s ease;
         }
-        .back-btn:hover { color: #e2e8f0; border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+        .back-btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
 
-        /* ── HERO IMAGE ── */
         {% set img_list = blog.image_list() %}
         .hero-img {
-            width: 100%; height: 460px; overflow: hidden;
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            width: 100%; min-height: min(72vh, 560px); overflow: hidden;
+            background: linear-gradient(135deg, rgba(244,184,96,0.18), rgba(141,211,255,0.14));
             display: flex; align-items: center; justify-content: center;
-            position: relative;
+            position: relative; cursor: {% if img_list %}pointer{% else %}default{% endif %};
         }
         .hero-img img { width: 100%; height: 100%; object-fit: cover; }
         .hero-img .placeholder { font-size: 80px; }
         .hero-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(15,15,19,0.85) 0%, transparent 60%);
+            background: linear-gradient(to top, rgba(8,17,31,0.92) 0%, rgba(8,17,31,0.22) 48%, transparent 76%);
         }
 
-        /* ── ARTICLE ── */
-        .article-wrap { max-width: 780px; margin: 0 auto; padding: 0 24px 80px; }
+        .article-wrap { max-width: 920px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 28px) 80px; }
 
         .article-meta {
             display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-            margin-top: -32px; position: relative; z-index: 2; padding-bottom: 28px;
+            margin-top: -34px; position: relative; z-index: 2; padding-bottom: 28px;
         }
         .badge {
-            background: rgba(139,92,246,0.2); color: #a78bfa;
+            background: rgba(244,184,96,0.12); color: #ffd68d;
             padding: 5px 14px; border-radius: 20px;
             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-            border: 1px solid rgba(139,92,246,0.3);
+            border: 1px solid rgba(244,184,96,0.18);
         }
         .author-chip {
-            background: rgba(255,255,255,0.06); color: #cbd5e1;
+            background: rgba(255,255,255,0.06); color: #dbe7ff;
             padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
         }
 
         h1.title {
-            font-family: 'Merriweather', serif;
-            font-size: 2.4rem; font-weight: 700; line-height: 1.3;
-            color: #f8fafc; margin-bottom: 32px;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.08;
+            color: #f8fbff; margin-bottom: 28px; letter-spacing: -0.03em;
+            text-wrap: balance;
         }
 
         .divider { height: 1px; background: rgba(255,255,255,0.07); margin-bottom: 32px; }
 
         .content {
-            font-family: 'Merriweather', serif;
-            font-size: 1.05rem; line-height: 1.95; color: #94a3b8;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.15rem, 1.8vw, 1.35rem); line-height: 1.95; color: #c9d4ea;
             white-space: pre-wrap;
         }
 
-        /* ── PHOTO GALLERY ── */
         .gallery-section { margin-top: 48px; }
         .gallery-section h3 {
             font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.1em; color: #475569; margin-bottom: 16px;
+            letter-spacing: 0.1em; color: var(--muted-2); margin-bottom: 16px;
         }
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
         }
         .gallery-grid img {
             width: 100%; aspect-ratio: 4/3; object-fit: cover;
-            border-radius: 10px; cursor: pointer;
+            border-radius: 16px; cursor: pointer;
             border: 1px solid rgba(255,255,255,0.06);
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
-        .gallery-grid img:hover { transform: scale(1.03); border-color: rgba(139,92,246,0.5); }
+        .gallery-grid img:hover { transform: scale(1.02); border-color: rgba(244,184,96,0.45); box-shadow: 0 18px 28px rgba(2, 6, 23, 0.28); }
 
-        /* ── ACTION BUTTONS ── */
         .actions {
             display: flex; gap: 12px; margin-top: 48px;
             padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.07);
         }
         .btn-edit {
             padding: 12px 28px;
-            background: rgba(14,165,233,0.12); color: #38bdf8;
-            border: 1px solid rgba(14,165,233,0.2);
-            border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+            background: rgba(141,211,255,0.12); color: #8dd3ff;
+            border: 1px solid rgba(141,211,255,0.2);
+            border-radius: 999px; font-size: 0.9rem; font-weight: 700;
             text-decoration: none; transition: background 0.2s;
         }
-        .btn-edit:hover { background: rgba(14,165,233,0.2); }
+        .btn-edit:hover { background: rgba(141,211,255,0.2); }
         .btn-delete {
             padding: 12px 28px;
-            background: rgba(239,68,68,0.1); color: #f87171;
-            border: 1px solid rgba(239,68,68,0.2);
-            border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+            background: rgba(255,141,179,0.12); color: #ff8db3;
+            border: 1px solid rgba(255,141,179,0.2);
+            border-radius: 999px; font-size: 0.9rem; font-weight: 700;
             text-decoration: none; transition: background 0.2s;
         }
-        .btn-delete:hover { background: rgba(239,68,68,0.2); }
+        .btn-delete:hover { background: rgba(255,141,179,0.2); }
 
-        /* ── LIGHTBOX ── */
         .lightbox {
             display: none; position: fixed; inset: 0; z-index: 999;
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(10px);
-            align-items: center; justify-content: center;
+            background: rgba(3,8,18,0.94); backdrop-filter: blur(14px);
+            align-items: center; justify-content: center; padding: 24px;
         }
         .lightbox.active { display: flex; }
-        .lightbox img { max-width: 90vw; max-height: 88vh; border-radius: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        .lightbox img {
+            max-width: min(92vw, 1100px); max-height: 82vh;
+            border-radius: 18px; box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            object-fit: contain;
+        }
         .lightbox-close {
             position: absolute; top: 20px; right: 28px;
             color: white; font-size: 2rem; cursor: pointer; opacity: 0.7; line-height: 1;
@@ -137,12 +170,31 @@
         .lightbox-prev { left: 20px; }
         .lightbox-next { right: 20px; }
         .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.2); }
+
+        .hero-badge {
+            position: absolute; left: 24px; bottom: 24px; z-index: 1;
+            padding: 10px 14px; border-radius: 999px;
+            background: rgba(6,11,20,0.56); border: 1px solid rgba(255,255,255,0.1);
+            color: #f8fbff; font-weight: 600; font-size: 0.86rem;
+            backdrop-filter: blur(14px);
+        }
+
+        @media (max-width: 720px) {
+            header { padding: 14px 16px; }
+            .hero-img { min-height: 46vh; }
+            .article-meta { margin-top: -24px; }
+            .actions { flex-direction: column; }
+            .btn-edit, .btn-delete { width: 100%; text-align: center; }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-close { top: 10px; right: 16px; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">✦ BlogSpace</div>
+    <div class="logo">Blog<span>Space</span></div>
     <a href="/" class="back-btn">← Back to Posts</a>
 </header>
 
@@ -150,11 +202,14 @@
 <div class="hero-img">
     {% set img_list = blog.image_list() %}
     {% if img_list %}
-        <img src="/uploads/{{ img_list[0] }}" alt="{{ blog.title }}">
+        <img src="/uploads/{{ img_list[0] }}" alt="{{ blog.title }}" onclick="openLightbox(0)">
     {% else %}
         <div class="placeholder">📝</div>
     {% endif %}
     <div class="hero-overlay"></div>
+    {% if img_list %}
+    <div class="hero-badge">Click the image to open gallery</div>
+    {% endif %}
 </div>
 
 <div class="article-wrap">
@@ -206,6 +261,7 @@
     let current = 0;
 
     function openLightbox(index) {
+        if (!images.length) return;
         current = index;
         document.getElementById('lightbox-img').src = '/uploads/' + images[current];
         document.getElementById('lightbox').classList.add('active');
@@ -222,6 +278,7 @@
     }
 
     function changeImage(dir) {
+        if (!images.length) return;
         current = (current + dir + images.length) % images.length;
         document.getElementById('lightbox-img').src = '/uploads/' + images[current];
     }

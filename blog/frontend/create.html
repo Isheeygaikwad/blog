@@ -3,86 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <title>New Post</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #08111f;
+            --bg-2: #0d1728;
+            --panel: rgba(12, 20, 35, 0.82);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text: #edf2ff;
+            --muted: #97a6c1;
+            --accent: #f4b860;
+            --accent-2: #8dd3ff;
+            --shadow: 0 28px 80px rgba(2, 6, 23, 0.45);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0f0f13; color: #e2e8f0; min-height: 100vh; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(141, 211, 255, 0.14), transparent 28%),
+                radial-gradient(circle at 80% 10%, rgba(244, 184, 96, 0.12), transparent 24%),
+                linear-gradient(180deg, var(--bg), var(--bg-2));
+            color: var(--text);
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 54px 54px;
+            mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), transparent 85%);
+        }
 
         header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(15,15,19,0.85); backdrop-filter: blur(16px);
+            background: rgba(7, 14, 27, 0.74); backdrop-filter: blur(18px);
             border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 18px 48px;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px clamp(18px, 4vw, 48px);
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
-        .logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem; font-weight: 800;
+            background: linear-gradient(135deg, #fff6df, var(--accent), var(--accent-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
         .back-btn {
-            color: #94a3b8; text-decoration: none; font-size: 0.88rem; font-weight: 500;
-            padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.2s;
+            color: #d8e4ff; text-decoration: none; font-size: 0.88rem; font-weight: 600;
+            padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            transition: all 0.2s ease;
         }
-        .back-btn:hover { color: #e2e8f0; border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+        .back-btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
 
-        .wrapper { max-width: 680px; margin: 40px auto; padding: 0 24px 80px; }
+        .wrapper { max-width: 760px; margin: 34px auto; padding: 0 18px 80px; }
 
-        .page-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 28px; color: #f1f5f9; }
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.9rem, 4vw, 2.7rem);
+            font-weight: 800; margin-bottom: 22px; color: #f8fbff;
+        }
+        .page-subtitle {
+            max-width: 62ch;
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 26px;
+        }
 
         .card {
-            background: #16161d; border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 18px; padding: 36px;
+            background: var(--panel); border: 1px solid var(--panel-border);
+            border-radius: 24px; padding: clamp(20px, 4vw, 36px);
+            box-shadow: var(--shadow); backdrop-filter: blur(20px);
         }
 
         .field { margin-bottom: 22px; }
         label {
             display: block; font-size: 0.75rem; font-weight: 700;
-            color: #64748b; margin-bottom: 8px;
+            color: var(--muted); margin-bottom: 8px;
             text-transform: uppercase; letter-spacing: 0.08em;
         }
         input, select, textarea {
             width: 100%; padding: 12px 16px;
-            background: #0f0f13; border: 1.5px solid rgba(255,255,255,0.08);
-            border-radius: 10px; font-size: 0.93rem; font-family: 'Inter', sans-serif;
-            color: #e2e8f0; outline: none; transition: border-color 0.2s;
+            background: rgba(6, 11, 20, 0.8); border: 1.5px solid rgba(255,255,255,0.08);
+            border-radius: 14px; font-size: 0.95rem; font-family: 'Inter', sans-serif;
+            color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input::placeholder, textarea::placeholder { color: #334155; }
-        input:focus, select:focus, textarea:focus { border-color: #6d28d9; }
-        select option { background: #16161d; }
-        textarea { height: 180px; resize: vertical; line-height: 1.7; }
+        input::placeholder, textarea::placeholder { color: #53627d; }
+        input:focus, select:focus, textarea:focus { border-color: rgba(244,184,96,0.65); box-shadow: 0 0 0 4px rgba(244,184,96,0.1); }
+        select option { background: #0f1728; }
+        textarea { min-height: 210px; resize: vertical; line-height: 1.75; }
 
         .upload-box {
-            border: 2px dashed rgba(139,92,246,0.3); border-radius: 12px;
-            padding: 32px; text-align: center;
-            background: rgba(139,92,246,0.05); cursor: pointer; transition: all 0.2s;
+            border: 1.5px dashed rgba(244,184,96,0.35); border-radius: 18px;
+            padding: 28px; text-align: center;
+            background: linear-gradient(180deg, rgba(244,184,96,0.08), rgba(141,211,255,0.06)); cursor: pointer; transition: all 0.2s ease;
         }
-        .upload-box:hover { border-color: rgba(139,92,246,0.6); background: rgba(139,92,246,0.1); }
+        .upload-box:hover { border-color: rgba(244,184,96,0.65); transform: translateY(-1px); }
         .upload-box input { display: none; }
         .upload-box .icon { font-size: 36px; margin-bottom: 10px; }
-        .upload-box p { color: #a78bfa; font-size: 0.9rem; font-weight: 500; }
-        .upload-box small { color: #475569; font-size: 0.78rem; margin-top: 4px; display: block; }
+        .upload-box p { color: #ffd68d; font-size: 0.92rem; font-weight: 700; }
+        .upload-box small { color: var(--muted); font-size: 0.8rem; margin-top: 4px; display: block; }
 
-        .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-top: 14px; }
-        .preview-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 10px; margin-top: 14px; }
+        .preview-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
 
         .btn-submit {
             width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #f4b860, #ff8db3);
+            color: #101827; border: none; border-radius: 999px;
             font-size: 0.95rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+            box-shadow: 0 12px 26px rgba(244, 184, 96, 0.25);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(79,70,229,0.45); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 16px 30px rgba(255, 141, 179, 0.24); }
+
+        @media (max-width: 720px) {
+            header { padding: 14px 16px; }
+            .wrapper { margin-top: 20px; }
+            .card { border-radius: 20px; }
+            .upload-box { padding: 22px; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">✦ BlogSpace</div>
+    <div class="logo">Blog<span>Space</span></div>
     <a href="/" class="back-btn">← Back</a>
 </header>
 
 <div class="wrapper">
-    <h1 class="page-title">✍️ New Blog Post</h1>
+    <h1 class="page-title">New Blog Post</h1>
+    <p class="page-subtitle">Create a polished post with multiple images, rich content, and a clean layout that holds up on mobile screens.</p>
     <div class="card">
         <form action="/create" method="post" enctype="multipart/form-data">
 
@@ -99,7 +153,7 @@
             <div class="field">
                 <label>Category</label>
                 <select name="category" required>
-                    <option value="">-- Select Category --</option>
+                    <option value="">Select a category</option>
                     <option value="Technology">Technology</option>
                     <option value="Science">Science</option>
                     <option value="Education">Education</option>
